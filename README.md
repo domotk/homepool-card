@@ -70,7 +70,7 @@ entity: sensor.pool_daily_filtration_target
 |---|---|---|---|
 | `entity` | string | **required** | The pool's **Daily filtration target** sensor. |
 | `display_mode` | string | `pool_and_pump` | `pool`, `pump` (the equipment room) or `pool_and_pump`. |
-| `card_size` | string | `medium` | `small` (the bar only), `medium` (one drawing and the figures) or `full` (both drawings, and the reason for the pump's state). |
+| `card_size` | string | `medium` | `small` (the bar only), `medium` (one drawing and the figures) or `full` (both drawings, and the reason for the pump's state, in your language from HomePool 0.1.1 on; in English only before). |
 | `show_name` | boolean | `true` | Hide the name when the page heading already says it. |
 | `name` | string | — | Show this instead of the device's own name. |
 

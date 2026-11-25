@@ -1,5 +1,5 @@
 /**
- * HomePool Card — v0.1.0
+ * HomePool Card — v0.1.1
  *
  * Companion card for the `homepool` integration.
  *
@@ -22,7 +22,7 @@
  * No dependencies, no build step: served as a plain ES module.
  */
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 
 const STRINGS = {
   en: {
@@ -505,9 +505,12 @@ class HomePoolCard extends HTMLElement {
             : ""
         }
         ${
-          // The integration writes its reasons in English; elsewhere the
-          // translated source on the mode chip says the same thing.
-          size === "full" && reason && lang(this._hass) === "en" ? `<div class="reason">${esc(reason)}</div>` : ""
+          // HomePool 0.1.1 writes the reason in Home Assistant's language and
+          // adds reason_key; 0.1.0 wrote it in English only, so without the key
+          // it is shown only to English users.
+          size === "full" && reason && (control?.attributes?.reason_key || lang(this._hass) === "en")
+            ? `<div class="reason">${esc(reason)}</div>`
+            : ""
         }
       </ha-card>`;
 

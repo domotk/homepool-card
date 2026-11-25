@@ -33,7 +33,8 @@ notice from across the room that the pump stopped at noon on a sunny day.
   motion.
 - **Who is running the pump**, on the chip under the bar: the mode, or what
   overrode it — a manual cycle, the maintenance lock, freeze protection,
-  something switched by hand.
+  something switched by hand, by an automation or script, or at the device
+  itself (told apart from HomePool 0.1.2 on).
 - **The water at a glance**: pH, temperature, salt, the recommended chlorinator
   production and the next job due.
 - **One tap** opens the filtration details; the pump room opens the pump; the

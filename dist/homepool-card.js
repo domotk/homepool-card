@@ -22,7 +22,7 @@
  * No dependencies, no build step: served as a plain ES module.
  */
 
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 
 const STRINGS = {
   en: {
@@ -66,6 +66,9 @@ const STRINGS = {
       ph_correction: "pH correction",
       manual_cycle: "Manual cycle",
       manual_override: "Switched by hand",
+      manual_override_automation: "Switched by an automation",
+      manual_override_script: "Switched by a script",
+      manual_override_external: "Switched outside HomePool",
       mode: "Mode",
       unavailable: "Pump unavailable",
     },
@@ -120,6 +123,9 @@ const STRINGS = {
       ph_correction: "Corrección de pH",
       manual_cycle: "Ciclo manual",
       manual_override: "Accionada a mano",
+      manual_override_automation: "Accionada por una automatización",
+      manual_override_script: "Accionada por un script",
+      manual_override_external: "Accionada fuera de HomePool",
       mode: "Modo",
       unavailable: "Bomba no disponible",
     },
@@ -450,6 +456,12 @@ class HomePoolCard extends HTMLElement {
       value === null || value === undefined ? "" : `<div class="chip ${cls}"><span>${esc(label)}</span><b>${esc(value)}</b></div>`;
     const reason = control?.attributes?.reason || "";
     const source = control?.state;
+    // Who switched it, from HomePool 0.1.2 on: by hand unless it says otherwise.
+    const by = control?.attributes?.manual_override_by;
+    const sourceKey =
+      source === "manual_override" && ["automation", "script", "external"].includes(by)
+        ? `manual_override_${by}`
+        : source;
 
     this.shadowRoot.innerHTML = `
       <style>${STYLE}</style>
@@ -487,7 +499,7 @@ class HomePoolCard extends HTMLElement {
             ${
               source
                 ? `<button class="mode" data-open="${esc(own.operation_mode || "")}" title="${esc(reason)}">
-                    ${esc(source === "mode" && mode ? t(this._hass, `modes.${mode}`) : t(this._hass, `sources.${source}`))}
+                    ${esc(source === "mode" && mode ? t(this._hass, `modes.${mode}`) : t(this._hass, `sources.${sourceKey}`))}
                   </button>`
                 : ""
             }

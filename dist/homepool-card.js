@@ -1,5 +1,5 @@
 /**
- * HomePool Card — v0.1.1
+ * HomePool Card (version: VERSION below)
  *
  * Companion card for the `homepool` integration.
  *

@@ -89,7 +89,9 @@ The pump room is drawn in `full` size with `pool_and_pump`, or on its own with
 ## Contributing
 
 Issues and pull requests are welcome. The card is a single file with no
-dependencies and no build step, so a plain editor is all you need.
+dependencies and no build step, so a plain editor is all you need. Start with
+[CONTRIBUTING.md](CONTRIBUTING.md); [AGENTS.md](AGENTS.md) explains the file
+and its rules, for people and AI coding agents alike.
 
 ## Built with
 

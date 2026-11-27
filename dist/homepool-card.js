@@ -299,7 +299,7 @@ function steps(geo, variant, orientation) {
 
 function poolSvg(attrs, running, lightsOn) {
   const geo = outline(attrs.shape, attrs.dimensions);
-  const [light, deep] = WATER[attrs.liner_color] || WATER.light_blue;
+  const [light, deep] = Object.hasOwn(WATER, attrs.liner_color) ? WATER[attrs.liner_color] : WATER.light_blue;
   const returns = Math.min(Number(attrs.returns) || 2, 8);
   const skimmers = Math.min(Number(attrs.skimmers) || 1, 6);
   const { W, H, x0, y0, x1, y1 } = geo;

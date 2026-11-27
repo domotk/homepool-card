@@ -22,7 +22,7 @@
  * No dependencies, no build step: served as a plain ES module.
  */
 
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 const STRINGS = {
   en: {
@@ -79,6 +79,11 @@ const STRINGS = {
       backwash: "Backwash",
       filter_cleaning: "Clean the filter",
       ph_calibration: "Calibrate the pH probe",
+      winter_product: "Top up the winter product",
+      water_test: "Test the water",
+      skimmer_baskets: "Empty the skimmer baskets",
+      cell_cleaning: "Clean the chlorinator cell",
+      filter_media_check: "Check the sand or glass",
     },
     status: { ok: "All good", attention: "Needs attention", action_required: "Action required" },
     open_pump: "Pump of {name}",
@@ -138,6 +143,11 @@ const STRINGS = {
       backwash: "Contralavado",
       filter_cleaning: "Limpiar el filtro",
       ph_calibration: "Calibrar la sonda de pH",
+      winter_product: "Reponer el producto de invierno",
+      water_test: "Medir el agua",
+      skimmer_baskets: "Vaciar los cestos del skimmer",
+      cell_cleaning: "Limpiar la célula del clorador",
+      filter_media_check: "Revisar la arena o el vidrio",
     },
     status: { ok: "Todo bien", attention: "Requiere atención", action_required: "Acción necesaria" },
     open_pump: "Bomba de {name}",
@@ -466,11 +476,12 @@ class HomePoolCard extends HTMLElement {
       source === "manual_override" && ["automation", "script", "external"].includes(by)
         ? `manual_override_${by}`
         : source;
-    // A source this card does not know yet (a newer HomePool) reads as words, not as a key.
-    const sourceLabel = (key) => {
-      const label = t(this._hass, `sources.${key}`);
-      return label === `sources.${key}` ? String(key).replace(/_/g, " ") : label;
+    // A key this card does not know yet (a newer HomePool) reads as words, not as a key.
+    const known = (group, key) => {
+      const label = t(this._hass, `${group}.${key}`);
+      return label === `${group}.${key}` ? String(key).replace(/_/g, " ") : label;
     };
+    const sourceLabel = (key) => known("sources", key);
 
     this.shadowRoot.innerHTML = `
       <style>${STYLE}</style>
@@ -521,7 +532,7 @@ class HomePoolCard extends HTMLElement {
                 ${chip(t(this._hass, "water"), water !== null ? `${water.toFixed(1)} °C` : null)}
                 ${chip(t(this._hass, "salt"), salt !== null ? `${salt.toFixed(1)} g/L` : null)}
                 ${chip(t(this._hass, "production"), rec !== null ? t(this._hass, "recommended", { p: Math.round(rec) }) : null)}
-                ${task && task !== "none" ? chip(t(this._hass, "next_task"), t(this._hass, `tasks.${task}`), st("manual_action_pending")?.state === "on" ? "warn" : "") : ""}
+                ${task && task !== "none" ? chip(t(this._hass, "next_task"), known("tasks", task), st("manual_action_pending")?.state === "on" ? "warn" : "") : ""}
               </div>`
             : ""
         }

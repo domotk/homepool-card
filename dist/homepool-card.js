@@ -22,7 +22,7 @@
  * No dependencies, no build step: served as a plain ES module.
  */
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const STRINGS = {
   en: {
@@ -61,9 +61,11 @@ const STRINGS = {
     sources: {
       hands_off: "Hands off",
       maintenance_lock: "Maintenance lock",
+      winter_passive: "Passive wintering",
       safety: "Safety shutoff",
       freeze_protection: "Freeze protection",
       ph_correction: "pH correction",
+      treatment: "Water treatment",
       manual_cycle: "Manual cycle",
       manual_override: "Switched by hand",
       manual_override_automation: "Switched by an automation",
@@ -118,9 +120,11 @@ const STRINGS = {
     sources: {
       hands_off: "Manos fuera",
       maintenance_lock: "Bloqueo de mantenimiento",
+      winter_passive: "Invernaje pasivo",
       safety: "Parada de seguridad",
       freeze_protection: "Protección antiheladas",
       ph_correction: "Corrección de pH",
+      treatment: "Tratamiento del agua",
       manual_cycle: "Ciclo manual",
       manual_override: "Accionada a mano",
       manual_override_automation: "Accionada por una automatización",
@@ -295,7 +299,7 @@ function steps(geo, variant, orientation) {
 
 function poolSvg(attrs, running, lightsOn) {
   const geo = outline(attrs.shape, attrs.dimensions);
-  const [light, deep] = WATER[attrs.liner_color] || WATER.light_blue;
+  const [light, deep] = Object.hasOwn(WATER, attrs.liner_color) ? WATER[attrs.liner_color] : WATER.light_blue;
   const returns = Math.min(Number(attrs.returns) || 2, 8);
   const skimmers = Math.min(Number(attrs.skimmers) || 1, 6);
   const { W, H, x0, y0, x1, y1 } = geo;
@@ -462,6 +466,11 @@ class HomePoolCard extends HTMLElement {
       source === "manual_override" && ["automation", "script", "external"].includes(by)
         ? `manual_override_${by}`
         : source;
+    // A source this card does not know yet (a newer HomePool) reads as words, not as a key.
+    const sourceLabel = (key) => {
+      const label = t(this._hass, `sources.${key}`);
+      return label === `sources.${key}` ? String(key).replace(/_/g, " ") : label;
+    };
 
     this.shadowRoot.innerHTML = `
       <style>${STYLE}</style>
@@ -499,7 +508,7 @@ class HomePoolCard extends HTMLElement {
             ${
               source
                 ? `<button class="mode" data-open="${esc(own.operation_mode || "")}" title="${esc(reason)}">
-                    ${esc(source === "mode" && mode ? t(this._hass, `modes.${mode}`) : t(this._hass, `sources.${sourceKey}`))}
+                    ${esc(source === "mode" && mode ? t(this._hass, `modes.${mode}`) : sourceLabel(sourceKey))}
                   </button>`
                 : ""
             }
